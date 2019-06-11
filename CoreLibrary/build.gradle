@@ -6,7 +6,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion VERSION_COMPILE_SDK
-    buildToolsVersion VERSION_BUILD_TOOLS
 
     defaultConfig {
         minSdkVersion VERSION_MIN_SDK
@@ -46,7 +45,7 @@ dependencies {
 // Using Stub classes first when compiling.
 afterEvaluate {
     project.android.libraryVariants.each { LibraryVariant variant ->
-        variant.javaCompile.doFirst { JavaCompile javaCompile ->
+        variant.getJavaCompileProvider().get().doFirst { JavaCompile javaCompile ->
             String projectAndroidStubPath = project.project(projectAndroidStub).projectDir.canonicalPath
 //            println "projectAndroidStubPath: ${projectAndroidStubPath}"
             File stubPath = javaCompile.classpath.find {
@@ -55,7 +54,8 @@ afterEvaluate {
             if (stubPath == null) {
                 throw new RuntimeException("reset bootclasspath error.")
             }
-            javaCompile.options.setBootClasspath(Joiner.on(File.pathSeparator).join(stubPath, javaCompile.options.bootClasspath))
+            javaCompile.options.bootstrapClasspath = files(stubPath) + javaCompile.options.bootstrapClasspath
+//            javaCompile.options.setBootClasspath(Joiner.on(File.pathSeparator).join(stubPath, javaCompile.options.bootClasspath))
         }
     }
 }

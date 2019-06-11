@@ -15,8 +15,8 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 
 tasks.withType(GroovyCompile) {
-    sourceCompatibility = '1.7'
-    targetCompatibility = '1.7'
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
 }
 
 repositories {
@@ -44,7 +44,7 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.6'
     implementation 'org.ow2.asm:asm:4.0'
     implementation 'org.javassist:javassist:3.18.2-GA'
-    implementation 'com.android.tools.build:gradle:3.0.0'
+    implementation 'com.android.tools.build:gradle:3.4.1'
 }
 
 

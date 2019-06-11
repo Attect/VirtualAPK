@@ -4,7 +4,7 @@ import com.android.build.gradle.api.ApkVariant
 import com.android.build.gradle.internal.api.ApplicationVariantImpl
 import com.didi.virtualapk.VAExtention
 import com.didi.virtualapk.utils.Log
-import com.sun.istack.internal.NotNull
+import org.jetbrains.annotations.NotNull
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project

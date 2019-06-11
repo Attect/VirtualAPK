@@ -1,6 +1,9 @@
 package com.didi.virtualapk.hooker
 
 import com.android.build.gradle.api.ApkVariant
+import com.android.build.gradle.internal.scope.BuildElements
+import com.android.build.gradle.internal.scope.BuildOutput
+import com.android.build.gradle.internal.scope.ExistingBuildElements
 import com.android.build.gradle.tasks.ManifestProcessorTask
 import com.didi.virtualapk.os.Build
 import com.didi.virtualapk.collector.dependence.DependenceInfo
@@ -60,12 +63,19 @@ class MergeManifestsHooker extends GradleTaskHooker<ManifestProcessorTask> {
     void afterTaskExecute(ManifestProcessorTask task) {
         def MERGED_MANIFESTS = ScopeCompat.getArtifact(project, "MERGED_MANIFESTS")
         if (Build.V3_1_OR_LATER) {
-            File outputFile = (Reflect.on('com.android.build.gradle.internal.scope.ExistingBuildElements')
-                    .call('from', MERGED_MANIFESTS, ScopeCompat.getArtifactFile(scope, project, MERGED_MANIFESTS))
-                    .call('element', variantData.outputScope.mainSplit))
-                    .call('getOutputFile')
-                    .get()
-            rewrite(outputFile)
+//            File outputFile = ((BuildOutput)(Reflect.on('com.android.build.gradle.internal.scope.ExistingBuildElements')
+//                    .call('from', MERGED_MANIFESTS, ScopeCompat.getArtifactFile(scope, project, MERGED_MANIFESTS))
+//                    .call('element', variantData.outputScope.mainSplit))).getOutputFile()
+//                    .call('getOutputFile')
+//                    .get()
+
+//            ExistingBuildElements.from(MERGED_MANIFESTS,ScopeCompat.getArtifactFile(scope, project, MERGED_MANIFESTS)).elements
+            BuildElements buildElements = ExistingBuildElements.from(MERGED_MANIFESTS, ScopeCompat.getArtifactFile(scope, project, MERGED_MANIFESTS))
+            System.out.println("buildElementsSize:" + buildElements.size())
+            if(buildElements.elements.size() > 0){
+                File outputFile = buildElements.element(variantData.outputScope.mainSplit).outputFile
+                rewrite(outputFile)
+            }
         } else {
             variantData.outputScope.getOutputs(MERGED_MANIFESTS).each {
                 rewrite(it.outputFile)
