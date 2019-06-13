@@ -36,11 +36,11 @@ repositories {
 final String projectAndroidStub = ':AndroidStub'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    provided project(projectAndroidStub)
+    compileOnly project(projectAndroidStub)
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
 // Using Stub classes first when compiling.
